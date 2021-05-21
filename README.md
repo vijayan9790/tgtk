@@ -2,4 +2,4 @@
 
 **it'll be released at the end of may**
 
-read other [readme](/old-readme.md) if you don't care
+read other [readme](/old-README.md) if you don't care
