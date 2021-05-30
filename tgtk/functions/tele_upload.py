@@ -531,7 +531,7 @@ async def upload_single_file(path, message, force_edit,database=None,thumb_image
                     # reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
-                        f"uploading {os.path.basename(path)}",
+                        f"{os.path.basename(path)}",
                         message_for_progress_display,
                         start_time,
                         tout,
