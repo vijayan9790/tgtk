@@ -1,4 +1,4 @@
-# TGTK - A Telegram Bot
+# tgtk - telegram leech bot
 
 ## Notes:
 
