@@ -16,8 +16,8 @@ RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && apt-get ins
 
 RUN pip3 install --no-cache-dir tgtk
 
-COPY start.sh /tgtk
-RUN chmod 777 start.sh
+COPY . .
+RUN chmod +x start.sh
 
 RUN useradd -ms /bin/bash  myuser
 USER myuser
