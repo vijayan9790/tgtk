@@ -8,6 +8,7 @@ from telethon.tl.types import KeyboardButtonCallback
 from ..consts.ExecVarsSample import ExecVars
 from ..core.getCommand import get_command
 from ..core.getVars import get_val
+from ..core.speedtest import get_speed
 from ..functions.Leech_Module import check_link,cancel_torrent,pause_all,resume_all,purge_all,get_status,print_files, get_transfer
 from ..functions.tele_upload import upload_a_file,upload_handel
 from ..functions import Human_Format
@@ -156,9 +157,16 @@ def add_handlers(bot: TelegramClient):
         chats=get_val("ALD_USR"))
     )
 
+    bot.add_event_handler(
+        speed_handler,
+        events.NewMessage(pattern=command_process(get_command("SPEEDTEST")),
+        chats=get_val("ALD_USR"))
+    )
+
 
     signal.signal(signal.SIGINT, partial(term_handler,client=bot))
     signal.signal(signal.SIGTERM, partial(term_handler,client=bot))
+    bot.loop.run_until_complete(booted(bot))
 
     #*********** Callback Handlers *********** 
     
@@ -227,13 +235,13 @@ async def handle_leech_command(e):
         # cuz at any time there are 10-20 callbacks linked for leeching XD
            
         buts.append(
-                [KeyboardButtonCallback("upload in a zip.[Toggle]", data=f"leechzip toggle {tsp}")]
+                [KeyboardButtonCallback("upload in a zip. [Toggle]", data=f"leechzip toggle {tsp}")]
         )
         buts.append(
-                [KeyboardButtonCallback("extract from archive.[Toggle]", data=f"leechzipex toggleex {tsp}")]
+                [KeyboardButtonCallback("extract from archive. [Toggle]", data=f"leechzipex toggleex {tsp}")]
         )
         
-        conf_mes = await e.reply(f"<b>first click if you want to zip the contents or extract as an archive (only one will work at a time) then, </b>\n<b>choose where to upload your files: </b>\nthe files will be uploaded to default destination after {get_val('DEFAULT_TIMEOUT')} sec of no action by user.\n\n supported archives to extract are: .zip, 7z, tar, gzip2, iso, wim, rar, tar.gz,tar.bz2",parse_mode="html",buttons=buts)        
+        conf_mes = await e.reply(f"first click if you want to zip the contents or extract as an archive (only one will work at a time) then...\n\n<b>choose where to upload your files:</b>\nthe files will be uploaded to default destination: <b>{get_val('DEFAULT_TIMEOUT')}</b> after 60 sec of no action by user.</u>\n\n<b>supported archives to extract:</b>\nzip, 7z, tar, gzip2, iso, wim, rar, tar.gz, tar.bz2",parse_mode="html",buttons=buts)
         
         # zip check in background
         ziplist = await get_zip_choice(e,tsp)
@@ -399,6 +407,9 @@ async def handle_status_command(e):
 async def handle_u_status_command(e):
     await create_status_user_menu(e)
         
+async def speed_handler(e):
+    if await is_admin(e.client,e.sender_id,e.chat_id):
+        await get_speed(e)
         
 async def handle_test_command(e):
     pass
@@ -419,7 +430,10 @@ async def handle_upcancel_cb(e):
 
     if str(e.sender_id) == data[3]:
         db.cancel_download(data[1],data[2])
-        await e.answer("the upload has been canceled.")
+        await e.answer("the upload has been canceled.",alert=True)
+    elif e.sender_id in get_val("ALD_USR"):
+        db.cancel_download(data[1],data[2])
+        await e.answer("UPLOAD CANCELED IN ADMIN MODE XD ;)",alert=True)
     else:
         await e.answer("you can't cancel other peoples uploads.",alert=True)
 
@@ -565,7 +579,7 @@ async def set_password_zip(message):
             await message.reply(f"cannot update the password since this isn't your download.")
 
 async def start_handler(event):
-    msg = "TK - A Telegram Leecher Bot."
+    msg = "tgtk - a telegram leecher bot."
     await event.reply(msg, parse_mode="html")
 
 def progress_bar(percentage):
@@ -646,9 +660,9 @@ async def handle_server_command(message):
 
 
     try:
-        transfer = await get_transfer()
-        dlb = Human_Format.human_readable_bytes(transfer["dl_info_data"])
-        upb = Human_Format.human_readable_bytes(transfer["up_info_data"])
+        upb, dlb = await get_transfer()
+        dlb = Human_Format.human_readable_bytes(dlb)
+        upb = Human_Format.human_readable_bytes(upb)
     except:
         dlb = "N/A"
         upb = "N/A"
@@ -818,8 +832,15 @@ def term_handler(signum, frame, client):
             await omess.respond(msg, parse_mode="html")
         exit(0)
 
-    client.loop.create_task(term_async())
-        
+    client.loop.run_until_complete(term_async())
+
+async def booted(client):
+    chats = get_val("ALD_USR")
+    for i in chats:
+        try:
+            await client.send_message(i, "Bot booted successfully!")
+        except Exception as e:
+            torlog.info(f"Not found the entity {i}")
 
 def command_process(command):
     return re.compile(command,re.IGNORECASE)

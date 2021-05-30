@@ -20,7 +20,7 @@ upload_db = tkupload()
 var_db = tkdb()
 tor_db = tktorrents()
 user_db = userdb()
-
+transfer = [0,0] # UP,DOWN
 
 uptime = time.time()
 to_del = []

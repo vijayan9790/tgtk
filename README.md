@@ -97,6 +97,7 @@ add in [@BotFather](https://t.me/BotFather)
     instadl - Instagram Post/Reel/IGTV download
     setthumb - Set the thumbnail
     clearthumb - Clear the thumbnail
+    speedtest - Check internet speed of host
     settings - Settings of the bot ⚠️ Admin Only
     pauseall - Pause all torrents⚠️ Admin Only
     resumeall - Resume all torrents⚠️ Admin Only

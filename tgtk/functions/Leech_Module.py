@@ -18,6 +18,7 @@ from ..core.status.status import ARTask
 from ..core.status.upload import TGUploadTask
 from ..functions.Human_Format import human_readable_bytes
 from .dl_generator import generate_directs
+from .. import transfer
 
 #logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("telethon").setLevel(logging.WARNING)
@@ -107,6 +108,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         dl_path = newpath
 
                 if not rclone:
+                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
                     try:
@@ -116,7 +118,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         torlog.exception("exception in torrent file")
 
                     await ul_task.set_inactive()
-                    await print_files(omess,rdict,dl_task.hash, path = dl_path)
+                    await print_files(omess,rdict,dl_task.hash, path = dl_path, size=ul_size)
                     torlog.info("here are the files uploaded {}".format(rdict))
                     await QBittorrentWrap.delete_this(dl_task.hash)
                 else:
@@ -159,7 +161,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
 
                 if not rclone:
                     # TODO add exception update for tg upload everywhere
-
+                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
 
@@ -170,7 +172,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         torlog.exception("exception in magnet")
 
                     await ul_task.set_inactive()
-                    await print_files(omess,rdict,dl_task.hash, path = dl_path)
+                    await print_files(omess,rdict,dl_task.hash, path = dl_path, size=ul_size)
 
                     torlog.info("here are the files to be uploaded {}".format(rdict))
                     await QBittorrentWrap.delete_this(dl_task.hash)
@@ -218,6 +220,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         dl_path = newpath
 
                 if not rclone:
+                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
 
@@ -228,7 +231,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         torlog.exception("exception in torrent link")
 
                     await ul_task.set_inactive()
-                    await print_files(omess,rdict,dl_task.hash, path = dl_path)
+                    await print_files(omess,rdict,dl_task.hash, path = dl_path, size=ul_size)
 
                     torlog.info("here are the files uploaded {}".format(rdict))
                     await QBittorrentWrap.delete_this(dl_task.hash)
@@ -253,9 +256,14 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
 
             url = await generate_directs(urls)
             if url is not None:
-                if "**ERROR" in url:
-                    await omess.reply(url)
+                if "**ERROR:" in url:
+                    await rmsg.edit(url)
+                    await aio.sleep(2)
+                    await errored_message(omess, rmsg)
                     return
+                else:
+                    await rmsg.edit(f"**Found directs:** `{url}`")
+                    await aio.sleep(2)
 
             re_name = None
             try:
@@ -297,8 +305,10 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                     else:
                         path = newpath
 
-                if not rclone:
+                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
+
+                if not rclone:
                     await ul_task.dl_files()
 
                     try:
@@ -308,7 +318,7 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         torlog.exception("exception in direct links.")
 
                     await ul_task.set_inactive()
-                    await print_files(omess,rdict, path = path)
+                    await print_files(omess,rdict,dl_task.hash, path = dl_path, size=ul_size)
                     torlog.info("here are the files to be uploaded {}".format(rdict))
                 else:
                     res = await rclone_driver(path,rmsg, omess, dl_task)
@@ -423,19 +433,12 @@ async def errored_message(e, reason):
     else:
         await e.reply(msg, parse_mode="html")
 
-async def print_files(e,files,thash=None, path = None):
+async def print_files(e,files,thash=None, path = None, size=None):
     msg = f"<a href='tg://user?id={e.sender_id}'>completed.\n</a>"
 
-    if path is not None:
-        size = 0
-        try:
-            if os.path.isdir(path):
-                size = get_size_fl(path)
-            else:
-                size = os.path.getsize(path)
-        except:
-            torlog.warning("size calculation failed.")
-
+    if path is not None and size is None:
+        size = calculate_size(path)
+        transfer[0] += size
         size = human_readable_bytes(size)
         msg += f"uploaded size: {str(size)}\n\n"
 
@@ -513,13 +516,27 @@ async def print_files(e,files,thash=None, path = None):
         except:pass
         await aio.sleep(2)
 
+def calculate_size(path):
+    if path is not None:
+        try:
+            if os.path.isdir(path):
+                return get_size_fl(path)
+            else:
+                return os.path.getsize(path)
+        except:
+            torlog.warning("Size Calculation Failed.")
+            return 0
+    else:
+        return 0 
+
 
 
 async def get_transfer():
     client = await QBittorrentWrap.get_client()
     data = client.transfer_info()
-    print(data)
-    return data
+    dlbytes = data["dl_info_data"] + transfer[1]
+    upbytes = data["up_info_data"] + transfer[0]
+    return upbytes, dlbytes
 
 async def clear_stuff(path):
     try:
