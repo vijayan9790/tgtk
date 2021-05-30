@@ -6,6 +6,8 @@ all code do not belong to me, the original author is [yash-dk](https://github.co
 
 contact me on [telegram.](https://t.me/orsixtyone)
 
+support group: [link](https://t.me/tgleechsupport)
+
 ### how it works
 a pypi package named [tgtk](https://pypi.org/project/tgtk) containing all bot code, easily to install with 
 ```
