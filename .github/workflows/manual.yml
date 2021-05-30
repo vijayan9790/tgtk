@@ -1,0 +1,19 @@
+name: Docker Build CI
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  Docker Build CI:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the Docker image
+      run: |
+       echo "${{ secrets.DOCKERPASS }}" | docker login -u "${{ secrets.DOCKERUSER }}" --password-stdin
+       docker build -t reaitten/tk:latest .
+       docker push reaitten/tk:latest
