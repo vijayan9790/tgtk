@@ -2,8 +2,6 @@
 
 ## Notes:
 
-**do note that [yash-dk](https://github.com/yash-dk) will be creating a heroku fork of ttk, you should wait until he releases it in late may.**
-
 all code do not belong to me, the original author is [yash-dk](https://github.com/yash-dk). please support his works by using the repo what is was made for, and leaving a star on his repo.
 
 contact me on [telegram.](https://t.me/orsixtyone)
@@ -32,13 +30,13 @@ heroku stack:set container --app your-app-name
 ```
 git init
 git add .
-heroku git:remote -a your-app-name`
+heroku git:remote -a your-app-name
 git commit -m "initial commit"
 git push heroku main
 ```
 
 ## Prevent Sleeping Dyno
-To keep the dyno alive, and prevent it from idling/sleeping, you can use [Kaffeine[(https://kaffeine.herokuapp.com/)
+To keep the dyno alive, and prevent it from idling/sleeping, you can use [Kaffeine](https://kaffeine.herokuapp.com/)
 
 # Credits
 
