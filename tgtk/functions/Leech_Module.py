@@ -417,14 +417,14 @@ async def handle_ext_zip(path, rmess, omess):
             return ext_path
 
 async def errored_message(e, reason):
-    msg = f"<a href='tg://user?id={e.sender_id}'>completed.</a>\ndownload failed."
+    msg = f"<a href='tg://user?id={e.sender_id}'>completed.\n</a>\ndownload failed."
     if reason is not None:
         await reason.reply(msg, parse_mode="html")
     else:
         await e.reply(msg, parse_mode="html")
 
 async def print_files(e,files,thash=None, path = None):
-    msg = f"<a href='tg://user?id={e.sender_id}'>completed.</a>"
+    msg = f"<a href='tg://user?id={e.sender_id}'>completed.\n</a>"
 
     if path is not None:
         size = 0
