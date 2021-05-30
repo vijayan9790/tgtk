@@ -407,7 +407,7 @@ async def register_torrent(entity,message,user_msg=None,magnet=False,file=False)
             data = "torcancel {} {}".format(torrent.hash, omess.sender_id)
             base = get_val("BASE_URL_OF_BOT")
 
-            urll = f"{base}/tortk/files/{torrent.hash}"
+            urll = f"{base}/tgtk/files/{torrent.hash}"
 
             message = await message.edit("Download will be automatically started after 180s of no action.",buttons=[
                 [
@@ -449,7 +449,7 @@ async def register_torrent(entity,message,user_msg=None,magnet=False,file=False)
 
             base = get_val("BASE_URL_OF_BOT")
 
-            urll = f"{base}/tortk/files/{torrent.hash}"
+            urll = f"{base}/tgtk/files/{torrent.hash}"
 
             message = await message.edit(buttons=[
                 [
