@@ -108,7 +108,6 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         dl_path = newpath
 
                 if not rclone:
-                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
                     try:
@@ -161,7 +160,6 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
 
                 if not rclone:
                     # TODO add exception update for tg upload everywhere
-                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
 
@@ -220,7 +218,6 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                         dl_path = newpath
 
                 if not rclone:
-                    ul_size = calculate_size(dl_path)
                     ul_task = TGUploadTask(dl_task)
                     await ul_task.dl_files()
 
@@ -305,8 +302,8 @@ async def check_link(msg,rclone=False,is_zip=False, extract=False, prev_msg=None
                     else:
                         path = newpath
 
-                    ul_size = calculate_size(dl_path)
-                    ul_task = TGUploadTask(dl_task)
+                ul_size = calculate_size(path)
+                transfer[1] += ul_size # for aria2 downloads
 
                 if not rclone:
                     await ul_task.dl_files()
