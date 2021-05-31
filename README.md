@@ -23,7 +23,10 @@ git commit -m "initial commit"
 git push heroku main
 ```
 
-## Deploying your private custom repo (connect github account to heroku account)
+## Deploying your private custom repo
+
+(remember to connect github account to heroku account)
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Credits
