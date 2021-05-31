@@ -15,7 +15,7 @@ RUN apt-get install -y software-properties-common && apt-get -y update
 RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && apt-get install -y qbittorrent-nox
 
 COPY . .
-RUN pip3 install --no-cache-dir -r requiremnets.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 RUN chmod +x start.sh
 
 RUN useradd -ms /bin/bash  myuser
