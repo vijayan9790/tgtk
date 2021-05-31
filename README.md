@@ -1,11 +1,8 @@
 # tgtk - telegram leech bot
 
 ## Notes:
-a pypi package named [tgtk](https://pypi.org/project/tgtk) containing all bot code, easily to install with 
-```
-pip install tgtk
-```
-deploying from an docker image [reaitten/tk:latest](https://hub.docker.com/r/reaitten/tk/tags?page=1&ordering=last_updated)
+for forked repos / private templated repos
+use this if you'd like to edit any code for personal use.
 
 ## Deploy via Heroku CLI
 - Download [deploy.zip](https://github.com/reaitten/tgtk/releases).
