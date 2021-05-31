@@ -23,6 +23,9 @@ git commit -m "initial commit"
 git push heroku main
 ```
 
+## Deploying your private custom repo (connect github account to heroku account)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 # Credits
 
 > [yash-dk's TorToolkit](https://github.com/yash-dk/TorToolkit-Telegram)
