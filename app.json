@@ -10,23 +10,24 @@
   "env": {
     "BOT_TOKEN": {
       "description": "Your bot token, as a string.",
-      "value": ""
+      "value": "1899895047:AAF3lyvcXIhxx72_pzv5gXq0zIgt-M3iUiA"
     },
     "APP_ID": {
       "description": "Get this value from https://my.telegram.org",
-      "value": ""
+      "value": "3488711"
     },
     "API_HASH": {
       "description": "Get this value from https://my.telegram.org",
-      "value": ""
+      "value": "759b65d271d319935314e9666e20e58b"
     },
     "BASE_URL_OF_BOT": {
       "description": "https://appname.herokuapp.com",
-      "value": ""
+      "value": "https://myfirstleechx.herokuapp.com
+"
     },
     "AUTH_CHANNEL": {
       "description": "ALLOWED USERS [ids of user or supergroup] seperate by spaces",
-      "value": ""
+      "value": "1419306864 -1001366123258"
     },
     "GD_INDEX_URL": {
       "description": "gdrive index link",
