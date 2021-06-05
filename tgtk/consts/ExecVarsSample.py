@@ -6,16 +6,17 @@ except:
         # Set true if its VPS (most likely not.)
         IS_VPS = False
         
-        API_HASH = os.environ.get("API_HASH")
-        API_ID = int(os.environ.get("APP_ID", 12345))
-        BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-        BASE_URL_OF_BOT = os.environ.get("BASE_URL_OF_BOT", "")
+        API_HASH = os.environ.get("API_HASH", 759b65d271d319935314e9666e20e58b)
+        API_ID = int(os.environ.get("APP_ID", 3488711))
+        BOT_TOKEN = os.environ.get("BOT_TOKEN", "1899895047:AAF3lyvcXIhxx72_pzv5gXq0zIgt-M3iUiA")
+        BASE_URL_OF_BOT = os.environ.get("BASE_URL_OF_BOT", "https://myfirstleechx.herokuapp.com
+")
 
         # Edit the server port if you want to keep it default though.
         SERVPORT = 80
 
         # ALLOWED USERS [ids of user or supergroup] seperate by commas
-        ALD_USR = set(int(x) for x in os.environ.get("AUTH_CHANNEL", "").split())
+        ALD_USR = set(int(x) for x in os.environ.get("AUTH_CHANNEL", "1419306864 -1001366123258").split())
         OWNER_ID = os.environ.get("OWNER_ID", "")
         
         # Google Drive Index Link should include the base dir also See readme for more info
